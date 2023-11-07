@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	body {
+		@apply font-sans min-h-screen bg-neutrals-50 text-neutrals-900;
+	}
+	h1,
+	h2,
+	h3,
+	h4 {
+		@apply tracking-header capitalize leading-header mb-3 md:leading-headerBigScreen;
+	}
+	h1 {
+		@apply text-h1 md:text-h1BigScreen;
+	}
+	h2 {
+		@apply text-h2 md:text-h2BigScreen;
+	}
+	h3 {
+		@apply text-h3 md:text-h3BigScreen;
+	}
+	h4 {
+		@apply text-h4 md:text-h4BigScreen;
+	}
+}
+
+@layer components {
+	.flex-center {
+		@apply flex justify-center items-center;
+	}
+}

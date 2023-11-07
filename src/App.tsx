@@ -1,3 +1,24 @@
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { Landing, HomeLayout, Error } from "./pages"
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <HomeLayout />,
+		errorElement: <Error />,
+		children: [
+			{
+				index: true,
+				element: <Landing />,
+			},
+			{
+				path: "/results",
+				element: <p>Hello World</p>,
+			},
+		],
+	},
+])
+
 export default function App() {
-	return <h1 className="text-3xl font-bold underline">Hello world!</h1>
+	return <RouterProvider router={router} />
 }
