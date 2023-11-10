@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import { useEffect, useRef, useState } from "react"
 
 import { Form, Link, useNavigate } from "react-router-dom"
@@ -6,41 +6,30 @@ import { auth } from "../firebase"
 import FormInput from "../components/input/FormInput"
 import SubmitBtn from "../components/input/SubmitBtn"
 import { RxCrossCircled } from "react-icons/rx"
+import { FiAlertCircle } from "react-icons/fi"
+import { toast } from "react-toastify"
+import { useAuthContext } from "../context/AuthContext"
 
-// const USER_REGEX: RegExp = /^[A-z][A-z0-9-_]{3,23}$/
-const PWD_REGEX: RegExp =
-	/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
-// const REGISTER_URL: string = "/register"
+const EMAIL_REGEX: RegExp =
+	/^(\D)+(\w)*((\.(\w)+)?)+@(\D)+(\w)*((\.(\D)+(\w)*)+)?(\.)[a-z]{2,}$/
+const PWD_REGEX: RegExp = /^.{8,24}$/
 
 const Register = () => {
 	const navigate = useNavigate()
 	const userRef = useRef<HTMLInputElement>(null)
-	const errRef = useRef<HTMLParagraphElement>(null)
 
 	const [user, setUser] = useState("")
-	// const [validName, setValidName] = useState(false)
-	// const [userFocus, setUserFocus] = useState(false)
+	const [userFocus, setUserFocus] = useState(false)
 
 	const [pwd, setPwd] = useState("")
+	const [pwdFocus, setPwdFocus] = useState(false)
 	const [validPwd, setValidPwd] = useState(false)
-	// const [pwdFocus, setPwdFocus] = useState(false)
 
 	const [matchPwd, setMatchPwd] = useState("")
 	const [validMatch, setValidMatch] = useState(false)
-	// const [matchFocus, setMatchFocus] = useState(false)
 
-	const [errMsg, setErrMsg] = useState("")
-	const [success, setSuccess] = useState(false)
-
-	useEffect(() => {
-		userRef.current?.focus()
-	}, [])
-
-	// useEffect(() => {
-	// 	const result = USER_REGEX.test(user)
-
-	// 	setValidName(result)
-	// }, [user])
+	const [accountCreated, setAccountCreated] = useState(false)
+	const { authUser } = useAuthContext()
 
 	useEffect(() => {
 		const result = PWD_REGEX.test(pwd)
@@ -50,48 +39,44 @@ const Register = () => {
 		setValidMatch(match)
 	}, [pwd, matchPwd])
 
-	useEffect(() => {
-		setErrMsg("")
-	}, [user, pwd, matchPwd])
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		createUserWithEmailAndPassword(auth, user, pwd)
 			.then((userCredential) => {
 				console.log(userCredential)
-				navigate("/")
+				signOut(auth)
+				toast.success("Your account have been successfully created")
+				setAccountCreated(true)
 			})
 			.catch((error: Error) => {
 				console.log(error)
 			})
-		console.log(user, pwd)
+	}
 
-		setSuccess(true)
+	if (authUser) {
+		return (
+			<section>
+				<h1>You already have an account</h1>
+				<p>
+					<Link to="/">Back to home</Link>
+				</p>
+			</section>
+		)
 	}
 
 	return (
 		<>
-			{success ? (
+			{accountCreated ? (
 				<section>
-					<h1>Success!</h1>
+					<h1>Account successfully created</h1>
 					<p>
-						<Link to="login">Sign In</Link>
+						<Link to="/login">Sign In</Link>
 					</p>
 				</section>
 			) : (
 				<section className="h-screen grid place-items-center ">
-					<p
-						ref={errRef}
-						className={
-							errMsg
-								? "bg-pink-200 text-red-600 font-bold p-2 mb-2  "
-								: "absolute left-[-9999px]"
-						}
-					>
-						{errMsg}
-					</p>
 					<Form
-						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
+						className="card  max-w-xl sm:w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
 						onSubmit={handleSubmit}
 					>
 						<button
@@ -107,40 +92,71 @@ const Register = () => {
 							name="email"
 							type="email"
 							id="email"
-							ref={userRef}
+							isValid={EMAIL_REGEX.test(user)}
+							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setUser(e.target.value)}
 							value={user}
 							required
+							onFocus={() => setUserFocus(true)}
+							onBlur={() => setUserFocus(false)}
 						/>
+						{user && !userFocus && !EMAIL_REGEX.test(user) && (
+							<div className="flex justify-start items-center gap-x-1">
+								<FiAlertCircle className="text-error" />
+								<p className="text-error text-sm">
+									Please provide a valid email
+								</p>
+							</div>
+						)}
 
 						<FormInput
 							label="password"
 							name="password"
 							type="password"
 							id="password"
-							ref={userRef}
+							isValid={PWD_REGEX.test(pwd)}
+							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setPwd(e.target.value)}
 							value={pwd}
 							required
+							onFocus={() => setPwdFocus(true)}
+							onBlur={() => setPwdFocus(false)}
 						/>
+
+						{pwd && pwdFocus && !PWD_REGEX.test(pwd) && (
+							<div className="flex justify-start items-center gap-x-1">
+								<FiAlertCircle className="text-error" />
+								<p className="text-error text-sm">
+									Password must contain at least 8 characters
+								</p>
+							</div>
+						)}
 
 						<FormInput
 							label="confirm password"
 							name="confirm_pwd"
 							type="password"
 							id="confirm_pwd"
-							ref={userRef}
+							isValid={pwd === matchPwd}
+							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setMatchPwd(e.target.value)}
 							value={matchPwd}
 							required
 						/>
+
+						{pwd && matchPwd && pwd !== matchPwd && (
+							<div className="flex justify-start items-center gap-x-1">
+								<FiAlertCircle className="text-error" />
+								<p className="text-error text-sm">Passwords must match</p>
+							</div>
+						)}
 						<div className="mt-4">
 							<SubmitBtn
 								text="Sign Up"
-								disabled={!validPwd || !validMatch ? true : false}
+								disabled={!validPwd || !validMatch || !user ? true : false}
 							/>
 						</div>
 

@@ -7,28 +7,34 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../firebase"
 import FormInput from "../components/input/FormInput"
 import SubmitBtn from "../components/input/SubmitBtn"
+import { toast } from "react-toastify"
+import { useAuthContext } from "../context/AuthContext"
 
 const Login = () => {
 	const navigate = useNavigate()
 	// const { setAuth } = useContext(AuthContext);
 	const userRef = useRef<HTMLInputElement>(null)
 
+	const { authUser, success, setSuccess } = useAuthContext()
 	const [user, setUser] = useState("")
 	const [pwd, setPwd] = useState("")
-	const [success, setSuccess] = useState(false)
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		console.log(user, pwd)
+
 		signInWithEmailAndPassword(auth, user, pwd)
 			.then((userCredential) => {
 				console.log(userCredential)
 				setSuccess(true)
+				toast.success("You've been successfully logged in")
 				navigate("/")
 			})
 			.catch((err: Error) => {
 				console.log(err)
 			})
+	}
+
+	if (authUser) {
+		setSuccess(true)
 	}
 
 	return (
@@ -38,14 +44,14 @@ const Login = () => {
 					<h1>You are logged in!</h1>
 					<br />
 					<p>
-						<a href="/">Go to Home</a>
+						<Link to="/">Go to Home</Link>
 					</p>
 				</section>
 			) : (
-				<section className="h-screen grid place-items-center">
+				<section className="h-screen  grid place-items-center">
 					<Form
 						onSubmit={handleSubmit}
-						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
+						className="card  max-w-xl sm:w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative "
 					>
 						<button
 							onClick={() => navigate("/")}
@@ -59,7 +65,7 @@ const Login = () => {
 							name="email"
 							type="email"
 							id="email"
-							ref={userRef}
+							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setUser(e.target.value)}
 							value={user}
@@ -71,7 +77,7 @@ const Login = () => {
 							name="password"
 							type="password"
 							id="password"
-							ref={userRef}
+							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setPwd(e.target.value)}
 							value={pwd}

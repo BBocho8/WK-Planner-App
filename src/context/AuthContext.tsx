@@ -12,17 +12,22 @@ import { User as FirebaseUser, onAuthStateChanged } from "firebase/auth"
 type AuthContextValue = {
 	authUser: FirebaseUser | null
 	loading: boolean
+	success: boolean
+	setSuccess: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AuthContext = createContext<AuthContextValue>({
 	authUser: null,
 	loading: true,
+	success: false,
+	setSuccess: () => {},
 })
 export const useAuthContext = () => useContext(AuthContext)
 
 const AuthProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
 	const [authUser, setAuthUser] = useState<FirebaseUser | null>(null)
 	const [loading, setLoading] = useState(true)
+	const [success, setSuccess] = useState(false)
 
 	useEffect(() => {
 		const listen = onAuthStateChanged(auth, (user) => {
@@ -41,7 +46,7 @@ const AuthProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
 	}, [])
 
 	return (
-		<AuthContext.Provider value={{ authUser, loading }}>
+		<AuthContext.Provider value={{ authUser, loading, success, setSuccess }}>
 			{!loading && children}
 		</AuthContext.Provider>
 	)
