@@ -3,10 +3,12 @@ import TempNav from "../components/TempNav"
 
 const HomeLayout = () => {
 	return (
-		<div className="">
+		<>
 			<TempNav />
-			<Outlet />
-		</div>
+			<section className="align-element ">
+				<Outlet />
+			</section>
+		</>
 	)
 }
 export default HomeLayout

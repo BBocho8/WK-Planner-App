@@ -1,6 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+	plugins: [require("daisyui")],
+	daisyui: {
+		themes: [
+			{
+				mytheme: {
+					primary: "#B2456E",
+					secondary: "#FBEAE7",
+					accent: "#552619",
+					neutral: "#1f2937",
+					"base-100": "#f5f5f4",
+					info: "#38bdf8",
+					success: "#22c55e",
+					warning: "#f59e0b",
+					error: "#dc2626",
+				},
+			},
+		],
+	},
 	theme: {
 		extend: {
 			colors: {
@@ -68,6 +86,5 @@ export default {
 				header: "0.10rem",
 			},
 		},
-		plugins: [],
 	},
 }
