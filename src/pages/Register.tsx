@@ -139,7 +139,7 @@ const Register = () => {
 							name="confirm_pwd"
 							type="password"
 							id="confirm_pwd"
-							isValid={pwd === matchPwd}
+							isValid={matchPwd ? validMatch : false}
 							innerRef={userRef}
 							autoComplete="off"
 							onChange={(e) => setMatchPwd(e.target.value)}

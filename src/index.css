@@ -24,6 +24,10 @@
 	h4 {
 		@apply text-h4 md:text-h4BigScreen;
 	}
+	button:disabled {
+		cursor: not-allowed;
+		pointer-events: all !important;
+	}
 }
 
 @layer components {
