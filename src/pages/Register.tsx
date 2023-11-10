@@ -5,6 +5,7 @@ import { Form, Link, useNavigate } from "react-router-dom"
 import { auth } from "../firebase"
 import FormInput from "../components/input/FormInput"
 import SubmitBtn from "../components/input/SubmitBtn"
+import { RxCrossCircled } from "react-icons/rx"
 
 // const USER_REGEX: RegExp = /^[A-z][A-z0-9-_]{3,23}$/
 const PWD_REGEX: RegExp =
@@ -78,7 +79,7 @@ const Register = () => {
 					</p>
 				</section>
 			) : (
-				<section className="h-screen grid place-items-center">
+				<section className="h-screen grid place-items-center ">
 					<p
 						ref={errRef}
 						className={
@@ -90,9 +91,16 @@ const Register = () => {
 						{errMsg}
 					</p>
 					<Form
-						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
+						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
 						onSubmit={handleSubmit}
 					>
+						<button
+							onClick={() => navigate("/")}
+							className=" absolute top-4 right-2 "
+						>
+							<RxCrossCircled className="w-7 h-7" />
+						</button>
+
 						<h4 className="text-center text-3xl font-bold">Register</h4>
 						<FormInput
 							label="email"

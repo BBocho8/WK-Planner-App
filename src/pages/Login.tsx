@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { Form, Link, useNavigate } from "react-router-dom"
+import { RxCrossCircled } from "react-icons/rx"
 
 import { signInWithEmailAndPassword } from "firebase/auth"
 
@@ -11,20 +12,10 @@ const Login = () => {
 	const navigate = useNavigate()
 	// const { setAuth } = useContext(AuthContext);
 	const userRef = useRef<HTMLInputElement>(null)
-	const errRef = useRef<HTMLParagraphElement>(null)
 
 	const [user, setUser] = useState("")
 	const [pwd, setPwd] = useState("")
-	const [errMsg, setErrMsg] = useState("")
 	const [success, setSuccess] = useState(false)
-
-	useEffect(() => {
-		userRef.current?.focus()
-	}, [])
-
-	useEffect(() => {
-		setErrMsg("")
-	}, [user, pwd])
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -52,21 +43,16 @@ const Login = () => {
 				</section>
 			) : (
 				<section className="h-screen grid place-items-center">
-					<p
-						ref={errRef}
-						className={
-							errMsg
-								? "bg-pink-200 text-red-600 font-bold p-2 mb-2  "
-								: "absolute left-[-9999px]"
-						}
-					>
-						{errMsg}
-					</p>
-
 					<Form
 						onSubmit={handleSubmit}
-						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4"
+						className="card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
 					>
+						<button
+							onClick={() => navigate("/")}
+							className="absolute top-4 right-2"
+						>
+							<RxCrossCircled className="w-7 h-7" />
+						</button>
 						<h4 className="text-center text-3xl font-bold">Sign In</h4>
 						<FormInput
 							label="email"
