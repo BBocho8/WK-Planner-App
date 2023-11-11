@@ -278,7 +278,10 @@ const Navbar = () => {
 									{authUser ? (
 										<>
 											<p>{`Signed in as ${authUser.email}`}</p>{" "}
-											<button className="btn btn-xs" onClick={userSignOut}>
+											<button
+												className="flex justify-center mt-2 btn btn-sm"
+												onClick={userSignOut}
+											>
 												sign out
 											</button>
 										</>
