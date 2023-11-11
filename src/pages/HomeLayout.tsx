@@ -5,7 +5,7 @@ const HomeLayout = () => {
 	return (
 		<>
 			<TempNav />
-			<section className="align-element ">
+			<section className="">
 				<Outlet />
 			</section>
 		</>

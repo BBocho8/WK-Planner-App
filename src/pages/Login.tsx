@@ -26,7 +26,7 @@ const Login = () => {
 				console.log(userCredential)
 				setSuccess(true)
 				toast.success("You've been successfully logged in")
-				navigate("/")
+				navigate("/dashboard")
 			})
 			.catch((err: Error) => {
 				console.log(err)
@@ -48,10 +48,10 @@ const Login = () => {
 					</p>
 				</section>
 			) : (
-				<section className="h-screen  grid place-items-center">
+				<section className="grid h-screen place-items-center">
 					<Form
 						onSubmit={handleSubmit}
-						className="card  max-w-xl sm:w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative "
+						className="relative flex flex-col max-w-xl p-8 shadow-lg card sm:w-96 bg-base-100 gap-y-4 "
 					>
 						<button
 							onClick={() => navigate("/")}
@@ -59,7 +59,7 @@ const Login = () => {
 						>
 							<RxCrossCircled className="w-7 h-7" />
 						</button>
-						<h4 className="text-center text-3xl font-bold">Sign In</h4>
+						<h4 className="text-3xl font-bold text-center">Sign In</h4>
 						<FormInput
 							label="email"
 							name="email"
@@ -90,7 +90,7 @@ const Login = () => {
 							Not a member yet ?{" "}
 							<Link
 								to="/register"
-								className="ml-2 link link-hover link-primary capitalize"
+								className="ml-2 capitalize link link-hover link-primary"
 							>
 								Register
 							</Link>

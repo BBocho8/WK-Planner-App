@@ -1,5 +1,13 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
-import { Landing, HomeLayout, Error, Register, Login } from "./pages"
+import {
+	Landing,
+	HomeLayout,
+	Error,
+	Register,
+	Login,
+	About,
+	Dashboard,
+} from "./pages"
 
 const router = createBrowserRouter([
 	{
@@ -12,8 +20,12 @@ const router = createBrowserRouter([
 				element: <Landing />,
 			},
 			{
-				path: "/results",
-				element: <p>Hello World</p>,
+				path: "/about",
+				element: <About />,
+			},
+			{
+				path: "/dashboard",
+				element: <Dashboard />,
 			},
 		],
 	},

@@ -74,19 +74,19 @@ const Register = () => {
 					</p>
 				</section>
 			) : (
-				<section className="h-screen grid place-items-center ">
+				<section className="grid h-screen place-items-center ">
 					<Form
-						className="card  max-w-xl sm:w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4 relative"
+						className="relative flex flex-col max-w-xl p-8 shadow-lg card sm:w-96 bg-base-100 gap-y-4"
 						onSubmit={handleSubmit}
 					>
 						<button
 							onClick={() => navigate("/")}
-							className=" absolute top-4 right-2 "
+							className="absolute  top-4 right-2"
 						>
 							<RxCrossCircled className="w-7 h-7" />
 						</button>
 
-						<h4 className="text-center text-3xl font-bold">Register</h4>
+						<h4 className="text-3xl font-bold text-center">Register</h4>
 						<FormInput
 							label="email"
 							name="email"
@@ -102,9 +102,9 @@ const Register = () => {
 							onBlur={() => setUserFocus(false)}
 						/>
 						{user && !userFocus && !EMAIL_REGEX.test(user) && (
-							<div className="flex justify-start items-center gap-x-1">
+							<div className="flex items-center justify-start gap-x-1">
 								<FiAlertCircle className="text-error" />
-								<p className="text-error text-sm">
+								<p className="text-sm text-error">
 									Please provide a valid email
 								</p>
 							</div>
@@ -126,9 +126,9 @@ const Register = () => {
 						/>
 
 						{pwd && pwdFocus && !PWD_REGEX.test(pwd) && (
-							<div className="flex justify-start items-center gap-x-1">
+							<div className="flex items-center justify-start gap-x-1">
 								<FiAlertCircle className="text-error" />
-								<p className="text-error text-sm">
+								<p className="text-sm text-error">
 									Password must contain at least 8 characters
 								</p>
 							</div>
@@ -148,9 +148,9 @@ const Register = () => {
 						/>
 
 						{pwd && matchPwd && pwd !== matchPwd && (
-							<div className="flex justify-start items-center gap-x-1">
+							<div className="flex items-center justify-start gap-x-1">
 								<FiAlertCircle className="text-error" />
-								<p className="text-error text-sm">Passwords must match</p>
+								<p className="text-sm text-error">Passwords must match</p>
 							</div>
 						)}
 						<div className="mt-4">
@@ -164,7 +164,7 @@ const Register = () => {
 							Already a member?
 							<Link
 								to="/login"
-								className="ml-2 link link-hover link-primary capitalize"
+								className="ml-2 capitalize link link-hover link-primary"
 							>
 								login
 							</Link>
