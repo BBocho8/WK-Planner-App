@@ -72,6 +72,7 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom"
 import { useAuthContext } from "../context/AuthContext"
 import { toast } from "react-toastify"
 import NavButton from "./input/NavButton"
+import { useOnClickOutside } from "usehooks-ts"
 
 type NavLink = {
 	id: number
@@ -138,7 +139,9 @@ const Navbar = () => {
 	}, [authUser])
 
 	const linkContainerRef = useRef<HTMLDivElement>(null)
-	const linksRef = useRef<HTMLInputElement>(null)
+	const linksRef = useRef<HTMLDivElement>(null)
+	const showLinksRef = useRef<HTMLDivElement>(null)
+	const btnRef = useRef<HTMLButtonElement>(null)
 
 	const toggleLinks = () => {
 		setShowLinks(!showLinks)
@@ -213,8 +216,20 @@ const Navbar = () => {
 	// 	)
 	// }
 
+	const handleClickOutside = (e: Event) => {
+		if (
+			!btnRef.current?.contains(e.target as Element) &&
+			!showLinksRef.current?.contains(e.target as Element) &&
+			showLinks
+		) {
+			setShowLinks(false)
+		}
+	}
+
+	useOnClickOutside(linksRef, (e) => handleClickOutside(e))
+
 	return (
-		<nav>
+		<nav className="relative">
 			<div className="nav-center">
 				<div className="nav-header">
 					<div
@@ -225,14 +240,57 @@ const Navbar = () => {
 							WK Planner
 						</span>
 					</div>
-					<button
-						className={
-							showLinks ? "nav-toggle text-primary rotate-90" : "nav-toggle"
-						}
-						onClick={toggleLinks}
-					>
-						<FaBars className="text-2xl " />
-					</button>
+					<div ref={linksRef} id="ttt">
+						<button
+							ref={btnRef}
+							className={
+								showLinks ? "nav-toggle text-primary rotate-90" : "nav-toggle"
+							}
+							onClick={toggleLinks}
+						>
+							<FaBars className="text-2xl " />
+						</button>
+						{showLinks && (
+							<div
+								ref={showLinksRef}
+								className="absolute right-0 flex flex-col items-center justify-center gap-2 mt-4 top-[48px] links md:hidden bg-base-100  z-[1] p-2 shadow  rounded-box w-52 "
+							>
+								{links.map((link) => {
+									const { id, url, text } = link
+									const isActive = getUrlID() === url
+
+									return (
+										<NavLink
+											key={id}
+											to={url}
+											className={
+												isActive
+													? "active-nav text-primary"
+													: "active-nav text-neutral"
+											}
+											onClick={() => setShowLinks(false)}
+										>
+											{text}
+										</NavLink>
+									)
+								})}
+								<div>
+									{authUser ? (
+										<>
+											<p>{`Signed in as ${authUser.email}`}</p>{" "}
+											<button className="btn btn-xs" onClick={userSignOut}>
+												sign out
+											</button>
+										</>
+									) : (
+										<button className="flex justify-center mt-2 btn btn-sm">
+											Signed out
+										</button>
+									)}
+								</div>
+							</div>
+						)}
+					</div>
 				</div>
 				<div
 					className="hidden md:block links-container"
@@ -277,10 +335,9 @@ const Navbar = () => {
 					<NavButton isLoggedIn={isLoggedIn} userSignOut={userSignOut} />
 					{/* {UserMenu(authUser)} */}
 				</div>
-
-				{showLinks && (
+				{/* {showLinks && (
 					<div
-						className="flex flex-col items-center gap-4 links md:hidden "
+						className="absolute right-0 flex flex-col items-center justify-center gap-2 mt-4 top-[48px] links md:hidden bg-base-100  z-[1] p-2 shadow  rounded-box w-52 "
 						ref={linksRef}
 					>
 						{links.map((link) => {
@@ -314,7 +371,7 @@ const Navbar = () => {
 							)}
 						</div>
 					</div>
-				)}
+				)} */}
 			</div>
 		</nav>
 	)
