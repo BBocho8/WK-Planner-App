@@ -5,7 +5,7 @@ const HomeLayout = () => {
 	return (
 		<>
 			<TempNav />
-			<section className="">
+			<section className=" pt-nav-sm md:pt-nav-md">
 				<Outlet />
 			</section>
 		</>

@@ -111,19 +111,12 @@ const links: NavLink[] = [
 		url: "/dashboard",
 		text: "dashboard",
 	},
+	{
+		id: 6,
+		url: "/exercices",
+		text: "exercices",
+	},
 ]
-// const social: NavSocialLink[] = [
-// 	{
-// 		id: 1,
-// 		url: "https://www.facebook.com/SGEintrachtMendigBell",
-// 		Icon: () => <FaFacebook className="w-5 h-5 hover:opacity-80" />,
-// 	},
-// 	{
-// 		id: 2,
-// 		url: "https://www.instagram.com/sgeintrachtmendigbell/",
-// 		Icon: () => <FaInstagram className="w-5 h-5 hover:opacity-80" />,
-// 	},
-// ]
 
 const Navbar = () => {
 	const navigate = useNavigate()

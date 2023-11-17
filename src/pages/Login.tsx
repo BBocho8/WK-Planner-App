@@ -17,6 +17,7 @@ const Login = () => {
 
 	const { authUser, success, setSuccess } = useAuthContext()
 	const [user, setUser] = useState("")
+
 	const [pwd, setPwd] = useState("")
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -31,6 +32,11 @@ const Login = () => {
 			.catch((err: Error) => {
 				console.log(err)
 			})
+	}
+
+	const [generateID, setGenerateID] = useState(false)
+	const handleGenerateID = () => {
+		setGenerateID(true)
 	}
 
 	if (authUser) {
@@ -60,6 +66,31 @@ const Login = () => {
 							<RxCrossCircled className="w-7 h-7" />
 						</button>
 						<h4 className="text-3xl font-bold text-center">Sign In</h4>
+						<div className="flex flex-col items-center p-2 text-xs text-center border rounded-lg shadow-md gap-y-1 w-52 nav-animation">
+							<p className="text-sm font-medium text-primary-focus ">
+								To test the app features:
+							</p>
+
+							{!generateID ? (
+								<button
+									className="text-xs font-medium normal-case btn btn-md"
+									onClick={handleGenerateID}
+								>
+									CLICK for temporary Email & Password
+								</button>
+							) : (
+								<>
+									<p>
+										<span className="underline">Email:</span> test2@test2.com
+									</p>
+									<p>
+										<span className="underline">Password:</span>{" "}
+										pBqFfk#X6AMPj3x$
+									</p>
+								</>
+							)}
+						</div>
+
 						<FormInput
 							label="email"
 							name="email"

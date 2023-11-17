@@ -7,6 +7,7 @@ import {
 	Login,
 	About,
 	Dashboard,
+	AllExercices,
 } from "./pages"
 
 const router = createBrowserRouter([
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
 			{
 				path: "/about",
 				element: <About />,
+			},
+			{
+				path: "/exercices",
+				element: <AllExercices />,
 			},
 			{
 				path: "/dashboard",

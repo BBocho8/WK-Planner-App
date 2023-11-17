@@ -149,28 +149,6 @@ const NavButton = ({ isLoggedIn, userSignOut }: NavButtonProps) => {
 								// eslint-disable-next-line no-mixed-spaces-and-tabs
 						  })}
 				</div>
-				{/* {menuItemsLoggedIn.map((item) => {
-                    const { href, Icon, id, name } = item
-                    return (
-                        <Link key={id} to={href}>
-                            <MenuItem onClick={handleClose} className="flex gap-x-1">
-                                <Icon />
-                                <span className="text-lg font-medium">{name}</span>
-                            </MenuItem>
-                        </Link>
-                    )
-                })}
-                {menuItemsLoggedOut.map((item) => {
-                    const { href, Icon, id, name } = item
-                    return (
-                        <Link key={id} to={href}>
-                            <MenuItem onClick={handleClose} className="flex gap-x-1">
-                                <Icon />
-                                <span className="text-lg font-medium">{name}</span>
-                            </MenuItem>
-                        </Link>
-                    )
-                })} */}
 
 				<Divider />
 				{isLoggedIn && (
