@@ -5,3 +5,7 @@ export const getExerciceImg = (imagePath: string) => {
 
 	return imageFullUrl
 }
+
+export const getExerciceID = (id: string) => {
+	return id.trim().replaceAll("_", "-")
+}

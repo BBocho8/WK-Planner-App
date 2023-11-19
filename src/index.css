@@ -73,4 +73,29 @@
 	.nav-link:hover {
 		@apply text-orange-500;
 	}
+
+	/* PAGINATION STYLES */
+	.paginationBttns {
+		@apply w-4/5 h-[40px] mt-6 mb-4 flex justify-center items-center mx-auto;
+	}
+
+	.paginationBttns a {
+		@apply p-1 m-1 rounded-lg   border border-primary cursor-pointer;
+	}
+	.paginationBttns a:hover {
+		@apply text-white bg-primary;
+	}
+
+	.paginationActive a {
+		@apply text-white bg-primary;
+	}
+
+	.paginationDisabled a {
+		@apply cursor-not-allowed;
+	}
+
+	.previousBttn,
+	.nextBttn {
+		@apply text-primary border-none text-2xl;
+	}
 }

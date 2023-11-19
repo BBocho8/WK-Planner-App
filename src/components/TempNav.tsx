@@ -78,6 +78,9 @@ type NavLink = {
 	id: number
 	url: string
 	text: string
+	displayMainNav: boolean
+	displayMobileNav: boolean
+	authRelated?: boolean
 }
 // type NavSocialLink = {
 // 	id: number
@@ -90,31 +93,46 @@ const links: NavLink[] = [
 		id: 1,
 		url: "/",
 		text: "home",
+		displayMainNav: true,
+		displayMobileNav: true,
 	},
 	{
 		id: 2,
 		url: "/login",
 		text: "login",
+		displayMainNav: false,
+		displayMobileNav: true,
+		authRelated: true,
 	},
 	{
 		id: 3,
 		url: "/register",
 		text: "register",
+		displayMainNav: false,
+		displayMobileNav: true,
+		authRelated: true,
 	},
 	{
 		id: 4,
 		url: "/about",
 		text: "about",
+		displayMainNav: true,
+		displayMobileNav: true,
 	},
 	{
 		id: 5,
 		url: "/dashboard",
 		text: "dashboard",
+		displayMainNav: true,
+		displayMobileNav: true,
 	},
+
 	{
 		id: 6,
 		url: "/exercices",
 		text: "exercices",
+		displayMainNav: true,
+		displayMobileNav: true,
 	},
 ]
 
@@ -248,25 +266,53 @@ const Navbar = () => {
 								ref={showLinksRef}
 								className="absolute right-0 flex flex-col items-center justify-center gap-2 mt-4 top-[48px] links md:hidden bg-base-100  z-[1] p-2 shadow  rounded-box w-52 "
 							>
-								{links.map((link) => {
-									const { id, url, text } = link
-									const isActive = getUrlID() === url
-
-									return (
-										<NavLink
-											key={id}
-											to={url}
-											className={
-												isActive
-													? "active-nav text-primary"
-													: "active-nav text-neutral"
-											}
-											onClick={() => setShowLinks(false)}
-										>
-											{text}
-										</NavLink>
+								{links
+									.filter(
+										(link) =>
+											link.displayMobileNav === true &&
+											link.authRelated !== true
 									)
-								})}
+									.map((link) => {
+										const { id, url, text } = link
+										const isActive = getUrlID() === url
+
+										return (
+											<NavLink
+												key={id}
+												to={url}
+												className={
+													isActive
+														? "active-nav text-primary"
+														: "active-nav text-neutral"
+												}
+												onClick={() => setShowLinks(false)}
+											>
+												{text}
+											</NavLink>
+										)
+									})}
+								{!authUser &&
+									links
+										.filter((link) => link.authRelated === true)
+										.map((link) => {
+											const { id, url, text } = link
+											const isActive = getUrlID() === url
+
+											return (
+												<NavLink
+													key={id}
+													to={url}
+													className={
+														isActive
+															? "active-nav text-primary"
+															: "active-nav text-neutral"
+													}
+													onClick={() => setShowLinks(false)}
+												>
+													{text}
+												</NavLink>
+											)
+										})}
 								<div>
 									{authUser ? (
 										<>
@@ -279,9 +325,9 @@ const Navbar = () => {
 											</button>
 										</>
 									) : (
-										<button className="flex justify-center mt-2 btn btn-sm">
+										<div className="flex justify-center mt-2 badge badge-neutral badge-lg ">
 											Signed out
-										</button>
+										</div>
 									)}
 								</div>
 							</div>
@@ -294,23 +340,25 @@ const Navbar = () => {
 					style={linkStyles}
 				>
 					<div className="flex justify-center gap-2 " ref={linksRef}>
-						{links.map((link) => {
-							const { id, url, text } = link
-							const isActive = getUrlID() === url
-							return (
-								<NavLink
-									key={id}
-									to={url}
-									className={
-										isActive
-											? "active-nav text-primary "
-											: "active-nav text-neutral hover:text-accent"
-									}
-								>
-									{text}
-								</NavLink>
-							)
-						})}
+						{links
+							.filter((link) => link.displayMainNav === true)
+							.map((link) => {
+								const { id, url, text } = link
+								const isActive = getUrlID() === url
+								return (
+									<NavLink
+										key={id}
+										to={url}
+										className={
+											isActive
+												? "active-nav text-primary "
+												: "active-nav text-neutral hover:text-accent"
+										}
+									>
+										{text}
+									</NavLink>
+								)
+							})}
 					</div>
 				</div>
 

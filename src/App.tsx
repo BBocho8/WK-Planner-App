@@ -8,6 +8,7 @@ import {
 	About,
 	Dashboard,
 	AllExercices,
+	ExerciceDetails,
 } from "./pages"
 
 const router = createBrowserRouter([
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
 			{
 				path: "/exercices",
 				element: <AllExercices />,
+			},
+			{
+				path: "/exercices/:exerciceID",
+				element: <ExerciceDetails />,
 			},
 			{
 				path: "/dashboard",
