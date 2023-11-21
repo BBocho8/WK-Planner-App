@@ -2,27 +2,12 @@
 import { useGetAllExercices } from "../utils/exercices/fetchExercices"
 import { Exercice } from "../types/Exercices"
 import { getExerciceID } from "../utils/exercices/getExerciceImg"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BsFillGridFill, BsList } from "react-icons/bs"
-import { ExerciceCard } from "../components/ExerciceCard"
+import { ExerciceCard } from "../components/exercices/ExerciceCard"
 import ReactPaginate from "react-paginate"
 import { Link } from "react-router-dom"
-
-export interface ExerciceCardProps {
-	exercice: Exercice
-	layout: "grid" | "list"
-}
-
-const getFilteredItems = (query: string, exercices: Exercice[]) => {
-	if (!query) {
-		return exercices
-	}
-	if (query.length > 2) {
-		return exercices.filter((game) =>
-			game.name.toLowerCase().includes(query.toLowerCase())
-		)
-	}
-}
+import { getFilteredItems } from "../utils/exercices/getFilteredItems"
 
 const AllExercices = () => {
 	const { isLoading, data, error, isError } = useGetAllExercices()
@@ -34,6 +19,15 @@ const AllExercices = () => {
 	>(data?.exercices)
 
 	const [pageNumber, setPageNumber] = useState(0)
+	const exosPerPage = 12
+	const pagesVisited = pageNumber * exosPerPage
+	const changePage = ({ selected }: { selected: number }) => {
+		setPageNumber(selected)
+	}
+
+	useEffect(() => {
+		window.scrollTo({ top: 0 })
+	}, [pageNumber])
 
 	const [layout, setLayout] = useState<"grid" | "list">("grid")
 
@@ -56,6 +50,12 @@ const AllExercices = () => {
 
 	if (data) {
 		const allExercices = data.exercices
+		const instructions = allExercices.filter(
+			(ex) => ex.instructions.length > 10
+		)
+		// const maxInstructions = Math.max(...instructions)
+
+		console.log(instructions)
 
 		const filteredItems = getFilteredItems(query, allExercices)
 
@@ -91,9 +91,6 @@ const AllExercices = () => {
 			}
 		}
 
-		const exosPerPage = 12
-		const pagesVisited = pageNumber * exosPerPage
-
 		const displayExos = (array: Exercice[] | undefined) => {
 			if (array) {
 				return array
@@ -118,16 +115,12 @@ const AllExercices = () => {
 				: 0
 		)
 
-		const changePage = ({ selected }: { selected: number }) => {
-			setPageNumber(selected)
-		}
-
 		return (
-			<>
-				<h1 className="text-center">All Exercices</h1>
+			<section className="max-w-md px-8 mx-auto md:max-w-3xl lg:max-w-5xl">
+				<h1 className="mt-6 mb-12 text-center">All Exercices</h1>
 
-				<div className="flex items-center justify-between px-8 my-5 gap-x-5">
-					<div className="flex gap-x-2">
+				<div className="flex flex-col items-center justify-between max-w-5xl mx-auto gap-y-4 md:gap-y-0 md:flex-row my-7 gap-x-5">
+					<div className="flex justify-center w-full sm:w-auto gap-x-2">
 						<select
 							className="capitalize select select-sm select-bordered"
 							defaultValue="Filter by level..."
@@ -168,7 +161,7 @@ const AllExercices = () => {
 						</div>
 					</div>
 
-					<div className="hidden gap-x-2 sm:flex sm:justify-center sm:items-center">
+					<div className="hidden gap-x-2 md:flex md:justify-center md:items-center">
 						<span className="mr-2">
 							{filteredByLevel === "all"
 								? `${allExercices.length} exercices`
@@ -194,9 +187,9 @@ const AllExercices = () => {
 				<div
 					className={`${
 						layout === "grid"
-							? "grid gap-y-4 sm:gap-y-8 sm:grid-cols-2 lg:grid-cols-3 justify-center w-full  "
+							? "grid gap-y-4 sm:gap-x-4 sm:gap-y-8  md:grid-cols-2 lg:grid-cols-3 justify-center w-full   "
 							: layout === "list" &&
-							  "flex flex-col items-center justify-center gap-y-8 mx-4 lg:mx-auto mt-8 max-w-5xl"
+							  "flex flex-col items-center justify-center gap-y-8 mx-4 lg:mx-auto mt-8 "
 					}`}
 				>
 					{filteredByLevel === "all"
@@ -217,7 +210,7 @@ const AllExercices = () => {
 					activeClassName={"paginationActive"}
 				/>
 				<p>Go to page...</p>
-			</>
+			</section>
 		)
 	}
 }
