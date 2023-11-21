@@ -1,12 +1,27 @@
-// import FormInput from "../components/input/FormInput"
-
-import Hero from "../components/Hero"
+import { BottomNavigation, BottomNavigationAction } from "@mui/material"
+import HeroCarousel from "../components/HeroCarousel"
+import { useState } from "react"
+import { FaHome } from "react-icons/fa"
+import { useNavigate } from "react-router-dom"
 
 const Landing = () => {
+	const navigate = useNavigate()
+	const [value, setValue] = useState("")
+	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		setValue(newValue)
+	}
+
+	console.log(value)
+
+	if (value === "exercices") {
+		navigate("/exercices")
+	}
+
 	return (
 		<main>
-			<Hero />
-			<div className="pt-20">
+			<HeroCarousel />
+
+			<div>
 				Hello
 				<p>
 					Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum
@@ -34,6 +49,30 @@ const Landing = () => {
 					laboriosam delectus quibusdam eos quo repellendus debitis laborum
 					maxime.
 				</p>
+			</div>
+			<div className="sm:hidden">
+				<BottomNavigation showLabels value={value} onChange={handleChange}>
+					<BottomNavigationAction
+						label="Recents"
+						icon={<FaHome />}
+						value="home"
+					/>
+					<BottomNavigationAction
+						label="Exercices"
+						icon={<FaHome />}
+						value="exercices"
+					/>
+					<BottomNavigationAction
+						label="About"
+						icon={<FaHome />}
+						value="about"
+					/>
+					<BottomNavigationAction
+						label="Dashboard"
+						icon={<FaHome />}
+						value="dashboard"
+					/>
+				</BottomNavigation>
 			</div>
 		</main>
 	)

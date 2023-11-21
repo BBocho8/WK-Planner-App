@@ -127,10 +127,18 @@ const AllExercices = () => {
 							onChange={(e) => handleDisplay(e)}
 						>
 							<option disabled>Filter by level...</option>
-							<option value="all">all</option>
-							<option value="beginner">beginner</option>
-							<option value="intermediate">intermediate</option>
-							<option value="expert">expert</option>
+							<option value="all" className="capitalize">
+								all
+							</option>
+							<option value="beginner" className="capitalize">
+								beginner
+							</option>
+							<option value="intermediate" className="capitalize">
+								intermediate
+							</option>
+							<option value="expert" className="capitalize">
+								expert
+							</option>
 						</select>
 
 						<div>
