@@ -9,6 +9,9 @@ type ExerciceDetailsProps = {
 }
 
 const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
+	if (!exercice) {
+		return <p style={{ marginTop: "1rem " }}>Loading...</p>
+	}
 	return (
 		<section className="mb-10">
 			<div className="my-4 ">
