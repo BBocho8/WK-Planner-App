@@ -50,12 +50,6 @@ const AllExercices = () => {
 
 	if (data) {
 		const allExercices = data.exercices
-		const instructions = allExercices.filter(
-			(ex) => ex.instructions.length > 10
-		)
-		// const maxInstructions = Math.max(...instructions)
-
-		console.log(instructions)
 
 		const filteredItems = getFilteredItems(query, allExercices)
 

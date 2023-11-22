@@ -19,25 +19,25 @@ const heroItems: HeroCarouselItemProps[] = [
 		id: 1,
 		img: img1,
 
-		header: "Hello There",
+		header: "Progress Faster",
 		text: "// Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda // excepturi exercitationem quasi. In deleniti eaque aut repudiandae et // a id nisi. //",
-		btnText: "Get Started",
+		btnText: "GET STARTED",
 	},
 	{
 		id: 2,
 		img: img2,
 
-		header: "Hello World",
+		header: "Discover New Exercices",
 		text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae libero explicabo quasi ab id quis. Atque odit deleniti quia praesentium numquam suscipit dignissimos, nam maxime necessitatibus, laudantium sequi. Modi, rerum?",
-		btnText: "BUY NOW",
+		btnText: "EXERCICES",
 	},
 	{
 		id: 3,
 		img: img3,
 
-		header: "Hello People",
+		header: "Plan Your Workout",
 		text: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque, debitis animi laboriosam, dicta perspiciatis eos magni, odit in neque tempora sunt minima ducimus! Cumque, laborum.",
-		btnText: "Get your plan",
+		btnText: "TRY NOW",
 	},
 ]
 
