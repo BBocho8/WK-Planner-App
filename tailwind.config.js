@@ -36,6 +36,9 @@ export default {
 				h4BigScreen: "1rem",
 				body: "1rem",
 			},
+			colors: {
+				bgGrey: "#f1f1f1",
+			},
 			height: {
 				"nav-sm": "calc(100vh - 60px)",
 				"nav-md": "calc(100vh - 72px)",

@@ -48,7 +48,7 @@ const FormInput = ({
 	return (
 		<div className="form-control">
 			<label htmlFor={name} className="label">
-				<span className="label-text capitalize">{label}</span>
+				<span className="capitalize label-text">{label}</span>
 			</label>
 			<input
 				type={type}
