@@ -8,10 +8,9 @@ const Landing = () => {
 	const navigate = useNavigate()
 	const [value, setValue] = useState("")
 	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+		event.preventDefault()
 		setValue(newValue)
 	}
-
-	console.log(value)
 
 	if (value === "exercices") {
 		navigate("/exercices")
