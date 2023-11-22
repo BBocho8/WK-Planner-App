@@ -148,7 +148,7 @@ const AllExercices = () => {
 									name="search"
 									id="search"
 									onChange={(e) => setQuery(e.target.value)}
-									className="input input-sm input-bordered "
+									className="text-base input input-sm input-bordered "
 									placeholder="Search by name..."
 									autoComplete="off"
 								/>
