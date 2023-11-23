@@ -154,7 +154,7 @@ const Landing = () => {
 							value={message}
 							rows={5}
 							onChange={(e) => setMessage(e.target.value)}
-							className="textarea textarea-bordered"
+							className="text-base textarea textarea-bordered"
 							required
 						></textarea>
 					</div>
