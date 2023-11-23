@@ -59,7 +59,9 @@ const Landing = () => {
 				/>
 
 				<div className="flex flex-col items-center justify-center max-w-sm px-4 mx-auto my-12 sm:px-0 md:my-24">
-					<h2 className="font-bold">What we do ?</h2>
+					<h2 className="text-2xl font-bold uppercase sm:text-3xl">
+						What we do ?
+					</h2>
 					<h3 className="font-medium text-center ">
 						We help you track your workouts easily
 					</h3>
@@ -106,7 +108,7 @@ const Landing = () => {
 			</section>
 
 			<section className="flex flex-col items-center justify-center py-16 bg-bgGrey ">
-				<h2 className="max-w-md font-bold text-center w-80">
+				<h2 className="w-full max-w-md px-4 mb-4 text-xl font-bold text-center uppercase sm:mb-8 sm:text-2xl sm:px-0">
 					Ask us anything <span className="text-primary">and we'll get</span>{" "}
 					back soon in a day
 				</h2>
