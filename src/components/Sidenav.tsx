@@ -129,7 +129,7 @@ export default function Sidenav() {
 					variant="permanent"
 					open={open}
 					PaperProps={{
-						sx: { position: "absolute", top: { xs: "62.5px", md: "72px" } },
+						sx: { position: "fixed", top: { xs: "62.5px", md: "72px" } },
 					}}
 					ModalProps={{
 						container: document.getElementById("drawer-container"),
