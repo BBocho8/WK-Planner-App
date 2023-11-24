@@ -30,6 +30,7 @@ const Login = () => {
 				navigate("/dashboard")
 			})
 			.catch((err: Error) => {
+				toast.error("Please provide correct credentials")
 				console.log(err)
 			})
 	}

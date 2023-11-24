@@ -1,8 +1,9 @@
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth"
 import { useEffect, useRef, useState } from "react"
+import { doc, setDoc } from "firebase/firestore"
 
 import { Form, Link, useNavigate } from "react-router-dom"
-import { auth } from "../firebase"
+import { auth, db } from "../firebase"
 import FormInput from "../components/input/FormInput"
 import SubmitBtn from "../components/input/SubmitBtn"
 import { RxCrossCircled } from "react-icons/rx"
@@ -44,6 +45,15 @@ const Register = () => {
 		createUserWithEmailAndPassword(auth, user, pwd)
 			.then((userCredential) => {
 				console.log(userCredential)
+				return setDoc(doc(db, "users", userCredential.user.uid), {
+					email: user,
+				})
+
+				// db.collection("users").doc(userCredential.user.uid).set({
+				// 	email:user
+				// })
+			})
+			.then(() => {
 				signOut(auth)
 				toast.success("Your account have been successfully created")
 				setAccountCreated(true)
@@ -81,7 +91,7 @@ const Register = () => {
 					>
 						<button
 							onClick={() => navigate("/")}
-							className="absolute  top-4 right-2"
+							className="absolute top-4 right-2"
 						>
 							<RxCrossCircled className="w-7 h-7" />
 						</button>

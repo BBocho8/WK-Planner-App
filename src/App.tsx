@@ -33,10 +33,6 @@ const router = createBrowserRouter([
 				path: "/exercices/:exerciceID",
 				element: <ExerciceDetailsPage />,
 			},
-			{
-				path: "/dashboard",
-				element: <Dashboard />,
-			},
 		],
 	},
 	{
@@ -46,6 +42,10 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: <Login />,
+	},
+	{
+		path: "/dashboard",
+		element: <Dashboard />,
 	},
 ])
 

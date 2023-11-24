@@ -40,9 +40,10 @@ export default {
 				bgGrey: "#f1f1f1",
 			},
 			height: {
-				"nav-sm": "calc(100vh - 60px)",
+				"nav-sm": "calc(100vh - 62.5px)",
 				"nav-md": "calc(100vh - 72px)",
 			},
+
 			minHeight: {
 				outlet: "calc(100vh - 62.5px - 144px)",
 				"outlet-sm": "calc(100vh - 62.5px - 144px + 56px)",

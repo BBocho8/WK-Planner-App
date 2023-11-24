@@ -240,7 +240,7 @@ const Navbar = () => {
 	useOnClickOutside(linksRef, (e) => handleClickOutside(e))
 
 	return (
-		<nav className="relative">
+		<nav className="relative ">
 			<div className="nav-center">
 				<div className="nav-header">
 					<div
