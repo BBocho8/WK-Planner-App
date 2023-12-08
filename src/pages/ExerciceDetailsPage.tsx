@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import ExerciceDetails from "../components/exercices/ExerciceDetails"
 import { useGetAllExercices } from "../utils/exercices/fetchExercices"
 import { getExerciceID } from "../utils/exercices/getExerciceImg"
@@ -34,7 +34,19 @@ const ExerciceDetailsPage = () => {
 
 	console.log(isFavorite)
 	if (!authUser || !user || !refID || !exerciceID) {
-		return <div>Loading...</div>
+		return (
+			<p className="mt-4 text-center">
+				Please{" "}
+				<Link to="/login" className="font-semibold text-primary">
+					Login
+				</Link>{" "}
+				or{" "}
+				<Link to="/register" className="font-semibold text-primary">
+					Register
+				</Link>{" "}
+				to see this page.
+			</p>
+		)
 	}
 
 	if (isLoading) {
