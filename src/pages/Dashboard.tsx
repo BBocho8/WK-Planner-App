@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react"
-import { db } from "../firebase"
-import { collection, getDocs } from "firebase/firestore"
-import { useAuthContext } from "../context/AuthContext"
+// import { useEffect, useState } from "react"
+// import { db } from "../firebase"
+// import { collection, getDocs } from "firebase/firestore"
+import { User, useAuthContext } from "../context/AuthContext"
 import { Link } from "react-router-dom"
 import Sidenav from "../components/Sidenav"
 import TempNav from "../components/TempNav"
-
-interface User {
-	id: string
-	name: string
-	age: number
-	weight: number
-}
+import { useEffect, useState } from "react"
+import { collection, getDocs } from "firebase/firestore"
+import { db } from "../firebase"
 
 const Dashboard = () => {
 	const { authUser } = useAuthContext()
-	console.log(authUser)
-
 	const [user, setUser] = useState<User>()
 	const usersCollectionRef = collection(db, "users")
 
-	console.log(user)
 	useEffect(() => {
 		const getUsers = async () => {
 			const data = await getDocs(usersCollectionRef)
@@ -32,7 +25,7 @@ const Dashboard = () => {
 		}
 
 		getUsers()
-	}, [authUser])
+	}, [])
 
 	if (!authUser) {
 		return (
@@ -44,14 +37,26 @@ const Dashboard = () => {
 		)
 	}
 
-	return (
-		<>
-			<div id="drawer-container" className="relative">
-				<TempNav />
+	if (authUser && !user) {
+		return (
+			<p className="flex place-content-center">
+				<Link to="/login" className="text-xl font-medium">
+					Loading...
+				</Link>
+			</p>
+		)
+	}
 
-				<Sidenav />
-			</div>
-		</>
-	)
+	if (authUser && user) {
+		return (
+			<>
+				<div id="drawer-container" className="relative">
+					<TempNav />
+
+					<Sidenav user={user} />
+				</div>
+			</>
+		)
+	}
 }
 export default Dashboard

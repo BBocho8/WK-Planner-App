@@ -2,13 +2,20 @@ import { Exercice } from "../../types/Exercices"
 import { Breadcrumbs } from "@mui/material"
 
 import ExerciceDetailsCarousel from "./ExerciceDetailsCarousel"
-import { FaHome } from "react-icons/fa"
+import { FaHeart, FaHome } from "react-icons/fa"
+import { Link } from "react-router-dom"
 
 type ExerciceDetailsProps = {
 	exercice: Exercice
+	isFavorite?: boolean | null
+	handleFavorite: () => void
 }
 
-const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
+const ExerciceDetails = ({
+	exercice,
+	isFavorite,
+	handleFavorite,
+}: ExerciceDetailsProps) => {
 	return (
 		<section className="mb-10">
 			<div className="my-4 ">
@@ -25,7 +32,11 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 					<div className="text-neutral">
 						<FaHome />
 					</div>
-					<div className="text-xs capitalize text-neutral">Exercices</div>
+					<Link to="/exercices">
+						<div className="text-xs capitalize text-neutral hover:text-primary">
+							Exercices
+						</div>
+					</Link>
 					<div className="text-xs capitalize text-neutral">
 						{exercice.level}
 					</div>
@@ -33,9 +44,24 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 				</Breadcrumbs>
 			</div>
 
-			<h3 className="my-4 text-2xl font-semibold text-center">
-				{exercice.name}
-			</h3>
+			<div className="grid max-w-sm grid-cols-12 mx-auto sm:max-w-xl">
+				<h3 className="col-span-10 col-start-2 my-4 text-2xl font-semibold text-center ">
+					{exercice.name}
+				</h3>
+				<div
+					onClick={handleFavorite}
+					title={`${isFavorite ? "Remove from favorites" : "Add to favorites"}`}
+					className="flex items-center justify-center col-span-1 cursor-pointer"
+				>
+					<FaHeart
+						className={`text-xl ${
+							isFavorite
+								? "text-primary hover:text-base-content"
+								: "text-base-content hover:text-primary"
+						}`}
+					/>
+				</div>
+			</div>
 
 			<div className="grid items-center justify-center mx-auto gap-y-8 ">
 				<div className="w-full max-w-sm mx-auto rounded-lg shadow-md sm:max-w-xl">
@@ -50,13 +76,13 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 					}
 				>
 					<div className="flex flex-col items-center justify-center w-2/5 p-4 border rounded-md shadow-md gap-y-2">
-						<p className="flex flex-col items-center justify-center">
+						<div className="flex flex-col items-center justify-center">
 							<span className="font-semibold">Level </span>
 							<span className="uppercase badge badge-primary badge-lg">
 								{exercice.level}
 							</span>
-						</p>
-						<p className="flex flex-col items-center justify-center">
+						</div>
+						<div className="flex flex-col items-center justify-center">
 							<span className="font-semibold">Muscle(s) </span>
 							<div className="flex flex-col items-center gap-y-1 ">
 								<span className="uppercase badge badge-primary badge-lg">
@@ -68,25 +94,25 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 									</span>
 								)}
 							</div>
-						</p>
-						<p className="flex flex-col items-center justify-center">
+						</div>
+						<div className="flex flex-col items-center justify-center">
 							<span className="font-semibold">Category </span>{" "}
 							<span className="uppercase badge badge-primary badge-lg">
 								{exercice.category}
 							</span>
-						</p>
-						<p className="flex flex-col items-center justify-center">
+						</div>
+						<div className="flex flex-col items-center justify-center">
 							<span className="font-semibold">Force </span>{" "}
 							<span className="uppercase badge badge-primary badge-lg">
 								{exercice.force}
 							</span>
-						</p>
-						<p className="flex flex-col items-center justify-center">
+						</div>
+						<div className="flex flex-col items-center justify-center">
 							<span className="font-semibold">Equipment </span>{" "}
 							<span className="uppercase badge badge-primary badge-lg">
 								{exercice.equipment}
 							</span>
-						</p>
+						</div>
 					</div>
 					<div className="p-4 mx-2 border rounded-md shadow-md sm:mx-0">
 						<p className="my-3 text-xl font-semibold text-center uppercase sm:mb-2 sm:my-0 text-neutral">
@@ -95,11 +121,8 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 						<div className="flex flex-col items-start justify-center w-full gap-y-3 ">
 							{exercice.instructions.map((instruction, i) => {
 								return (
-									<>
-										<div
-											key={i}
-											className="flex items-center justify-start gap-x-2"
-										>
+									<div key={i}>
+										<div className="flex items-center justify-start gap-x-2">
 											<span className=" px-1.5 font-bold rounded-lg text-base-100 bg-accent">
 												{i + 1}
 											</span>
@@ -111,7 +134,7 @@ const ExerciceDetails = ({ exercice }: ExerciceDetailsProps) => {
 										{i + 1 < exercice.instructions.length && (
 											<hr className="w-1/2 mx-auto border border-base-200 sm:hidden" />
 										)}
-									</>
+									</div>
 								)
 							})}
 						</div>

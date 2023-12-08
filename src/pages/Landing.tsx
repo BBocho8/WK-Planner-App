@@ -125,7 +125,6 @@ const Landing = () => {
 								name="name"
 								type="text"
 								id="name"
-								// innerRef={userRef}
 								autoComplete="off"
 								onChange={(e) => setName(e.target.value)}
 								value={name}
@@ -138,7 +137,6 @@ const Landing = () => {
 								name="email"
 								type="email"
 								id="email"
-								// innerRef={userRef}
 								autoComplete="off"
 								onChange={(e) => setEmail(e.target.value)}
 								value={email}

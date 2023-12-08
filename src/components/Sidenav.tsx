@@ -28,32 +28,34 @@ import { PiUserListFill } from "react-icons/pi"
 import { FaHeart } from "react-icons/fa"
 import { FaCalendarCheck } from "react-icons/fa"
 
-import FavoritesExercices from "./dashboard/FavoritesExercices"
 import WorkoutsDashboard from "./dashboard/WorkoutsDashboard"
 import SignoutModal from "./dashboard/SignoutModal"
-import { useAuthContext } from "../context/AuthContext"
+import { User, useAuthContext } from "../context/AuthContext"
 import { signOut } from "firebase/auth"
 import { auth } from "../firebase"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
+import FavoritesExercises from "./dashboard/FavoritesExercises"
 
-const listItems = [
-	{
-		title: "My Profile",
-		component: <ProfileDashboard />,
-		icon: <PiUserListFill />,
-	},
-	{
-		title: "My Workouts",
-		component: <WorkoutsDashboard />,
-		icon: <FaCalendarCheck />,
-	},
-	{
-		title: "Fav Exercises",
-		component: <FavoritesExercices />,
-		icon: <FaHeart />,
-	},
-]
+const allNavItems = (user: User) => {
+	return [
+		{
+			title: "My Profile",
+			component: <ProfileDashboard user={user} />,
+			icon: <PiUserListFill />,
+		},
+		{
+			title: "My Workouts",
+			component: <WorkoutsDashboard user={user} />,
+			icon: <FaCalendarCheck />,
+		},
+		{
+			title: "Fav Exercises",
+			component: <FavoritesExercises />,
+			icon: <FaHeart />,
+		},
+	]
+}
 
 const drawerWidth = 240
 
@@ -87,28 +89,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 	...theme.mixins.toolbar,
 }))
 
-// interface AppBarProps extends MuiAppBarProps {
-// 	open?: boolean
-// }
-
-// const AppBar = styled(MuiAppBar, {
-// 	shouldForwardProp: (prop) => prop !== "open",
-// })<AppBarProps>(({ theme, open }) => ({
-// 	zIndex: theme.zIndex.drawer + 1,
-// 	transition: theme.transitions.create(["width", "margin"], {
-// 		easing: theme.transitions.easing.sharp,
-// 		duration: theme.transitions.duration.leavingScreen,
-// 	}),
-// 	...(open && {
-// 		marginLeft: drawerWidth,
-// 		width: `calc(100% - ${drawerWidth}px)`,
-// 		transition: theme.transitions.create(["width", "margin"], {
-// 			easing: theme.transitions.easing.sharp,
-// 			duration: theme.transitions.duration.enteringScreen,
-// 		}),
-// 	}),
-// }))
-
 const Drawer = styled(MuiDrawer, {
 	shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -137,7 +117,11 @@ const theme = createTheme({
 		},
 	},
 })
-export default function Sidenav() {
+
+type SidenavProps = {
+	user: User
+}
+export default function Sidenav({ user }: SidenavProps) {
 	const { setSuccess } = useAuthContext()
 	const navigate = useNavigate()
 
@@ -153,15 +137,12 @@ export default function Sidenav() {
 			.catch((err) => console.log(err))
 	}
 
-	// const theme = useTheme()
 	const [open, setOpen] = React.useState(false)
 	const [componentDisplayed, setComponentDisplayed] = React.useState(
-		<ProfileDashboard />
+		<ProfileDashboard user={user} />
 	)
 
-	// const handleDrawerOpen = () => {
-	// 	setOpen(true)
-	// }
+	const listItems = allNavItems(user)
 
 	const handleDrawerClose = () => {
 		setOpen(!open)
@@ -243,31 +224,6 @@ export default function Sidenav() {
 					</List>
 					<Divider />
 					<List>
-						{/* <ListItem disablePadding sx={{ display: "block" }}>
-							<ListItemButton
-								sx={{
-									minHeight: 48,
-									justifyContent: open ? "initial" : "center",
-									px: 2.5,
-								}}
-								onClick={() => console.log("helooooo")}
-							>
-								<ListItemIcon
-									sx={{
-										minWidth: 0,
-										mr: open ? 3 : "auto",
-										justifyContent: "center",
-									}}
-								>
-									<LuLogOut />
-								</ListItemIcon>
-								<ListItemText
-									primary="Sign Out"
-									sx={{ opacity: open ? 1 : 0 }}
-								/>
-							</ListItemButton>
-						</ListItem> */}
-
 						<SignoutModal isOpen={open} userSignOut={userSignOut} />
 					</List>
 				</Drawer>

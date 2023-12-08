@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, signOut } from "firebase/auth"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useEffect, useRef, useState } from "react"
 import { doc, setDoc } from "firebase/firestore"
 
@@ -29,7 +29,6 @@ const Register = () => {
 	const [matchPwd, setMatchPwd] = useState("")
 	const [validMatch, setValidMatch] = useState(false)
 
-	const [accountCreated, setAccountCreated] = useState(false)
 	const { authUser } = useAuthContext()
 
 	useEffect(() => {
@@ -47,18 +46,20 @@ const Register = () => {
 				console.log(userCredential)
 				return setDoc(doc(db, "users", userCredential.user.uid), {
 					email: user,
+					favoriteExercises: [""],
+					name: "",
+					gender: "",
+					dob: "",
+					weight: 0,
+					height: 0,
 				})
-
-				// db.collection("users").doc(userCredential.user.uid).set({
-				// 	email:user
-				// })
 			})
 			.then(() => {
-				signOut(auth)
+				navigate("/dashboard")
 				toast.success("Your account have been successfully created")
-				setAccountCreated(true)
 			})
 			.catch((error: Error) => {
+				toast.error("Email already used, please provide another one")
 				console.log(error)
 			})
 	}
@@ -76,112 +77,101 @@ const Register = () => {
 
 	return (
 		<>
-			{accountCreated ? (
-				<section>
-					<h1>Account successfully created</h1>
-					<p>
-						<Link to="/login">Sign In</Link>
-					</p>
-				</section>
-			) : (
-				<section className="grid h-screen place-items-center ">
-					<Form
-						className="relative flex flex-col max-w-xl p-8 shadow-lg card sm:w-96 bg-base-100 gap-y-4"
-						onSubmit={handleSubmit}
+			<section className="grid h-screen place-items-center ">
+				<Form
+					className="relative flex flex-col max-w-xl p-8 shadow-lg card sm:w-96 bg-base-100 gap-y-4"
+					onSubmit={handleSubmit}
+				>
+					<button
+						onClick={() => navigate("/")}
+						className="absolute top-4 right-2"
 					>
-						<button
-							onClick={() => navigate("/")}
-							className="absolute top-4 right-2"
-						>
-							<RxCrossCircled className="w-7 h-7" />
-						</button>
+						<RxCrossCircled className="w-7 h-7" />
+					</button>
 
-						<h4 className="text-3xl font-bold text-center">Register</h4>
-						<FormInput
-							label="email"
-							name="email"
-							type="email"
-							id="email"
-							isValid={EMAIL_REGEX.test(user)}
-							innerRef={userRef}
-							autoComplete="off"
-							onChange={(e) => setUser(e.target.value)}
-							value={user}
-							required
-							onFocus={() => setUserFocus(true)}
-							onBlur={() => setUserFocus(false)}
-						/>
-						{user && !userFocus && !EMAIL_REGEX.test(user) && (
-							<div className="flex items-center justify-start gap-x-1">
-								<FiAlertCircle className="text-error" />
-								<p className="text-sm text-error">
-									Please provide a valid email
-								</p>
-							</div>
-						)}
-
-						<FormInput
-							label="password"
-							name="password"
-							type="password"
-							id="password"
-							isValid={PWD_REGEX.test(pwd)}
-							innerRef={userRef}
-							autoComplete="off"
-							onChange={(e) => setPwd(e.target.value)}
-							value={pwd}
-							required
-							onFocus={() => setPwdFocus(true)}
-							onBlur={() => setPwdFocus(false)}
-						/>
-
-						{pwd && pwdFocus && !PWD_REGEX.test(pwd) && (
-							<div className="flex items-center justify-start gap-x-1">
-								<FiAlertCircle className="text-error" />
-								<p className="text-sm text-error">
-									Password must contain at least 8 characters
-								</p>
-							</div>
-						)}
-
-						<FormInput
-							label="confirm password"
-							name="confirm_pwd"
-							type="password"
-							id="confirm_pwd"
-							isValid={matchPwd ? validMatch : false}
-							innerRef={userRef}
-							autoComplete="off"
-							onChange={(e) => setMatchPwd(e.target.value)}
-							value={matchPwd}
-							required
-						/>
-
-						{pwd && matchPwd && pwd !== matchPwd && (
-							<div className="flex items-center justify-start gap-x-1">
-								<FiAlertCircle className="text-error" />
-								<p className="text-sm text-error">Passwords must match</p>
-							</div>
-						)}
-						<div className="mt-4">
-							<SubmitBtn
-								text="Sign Up"
-								disabled={!validPwd || !validMatch || !user ? true : false}
-							/>
+					<h4 className="text-3xl font-bold text-center">Register</h4>
+					<FormInput
+						label="email"
+						name="email"
+						type="email"
+						id="email"
+						isValid={EMAIL_REGEX.test(user)}
+						innerRef={userRef}
+						autoComplete="off"
+						onChange={(e) => setUser(e.target.value)}
+						value={user}
+						required
+						onFocus={() => setUserFocus(true)}
+						onBlur={() => setUserFocus(false)}
+					/>
+					{user && !userFocus && !EMAIL_REGEX.test(user) && (
+						<div className="flex items-center justify-start gap-x-1">
+							<FiAlertCircle className="text-error" />
+							<p className="text-sm text-error">Please provide a valid email</p>
 						</div>
+					)}
 
-						<p className="text-center">
-							Already a member?
-							<Link
-								to="/login"
-								className="ml-2 capitalize link link-hover link-primary"
-							>
-								login
-							</Link>
-						</p>
-					</Form>
-				</section>
-			)}
+					<FormInput
+						label="password"
+						name="password"
+						type="password"
+						id="password"
+						isValid={PWD_REGEX.test(pwd)}
+						innerRef={userRef}
+						autoComplete="off"
+						onChange={(e) => setPwd(e.target.value)}
+						value={pwd}
+						required
+						onFocus={() => setPwdFocus(true)}
+						onBlur={() => setPwdFocus(false)}
+					/>
+
+					{pwd && pwdFocus && !PWD_REGEX.test(pwd) && (
+						<div className="flex items-center justify-start gap-x-1">
+							<FiAlertCircle className="text-error" />
+							<p className="text-sm text-error">
+								Password must contain at least 8 characters
+							</p>
+						</div>
+					)}
+
+					<FormInput
+						label="confirm password"
+						name="confirm_pwd"
+						type="password"
+						id="confirm_pwd"
+						isValid={matchPwd ? validMatch : false}
+						innerRef={userRef}
+						autoComplete="off"
+						onChange={(e) => setMatchPwd(e.target.value)}
+						value={matchPwd}
+						required
+					/>
+
+					{pwd && matchPwd && pwd !== matchPwd && (
+						<div className="flex items-center justify-start gap-x-1">
+							<FiAlertCircle className="text-error" />
+							<p className="text-sm text-error">Passwords must match</p>
+						</div>
+					)}
+					<div className="mt-4">
+						<SubmitBtn
+							text="Sign Up"
+							disabled={!validPwd || !validMatch || !user ? true : false}
+						/>
+					</div>
+
+					<p className="text-center">
+						Already a member?
+						<Link
+							to="/login"
+							className="ml-2 capitalize link link-hover link-primary"
+						>
+							login
+						</Link>
+					</p>
+				</Form>
+			</section>
 		</>
 	)
 }
