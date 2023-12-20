@@ -41,6 +41,17 @@ export interface User {
 	favoriteExercises?: string[] | null
 	weight?: number
 	height?: number
+	workouts: Workout[]
+}
+
+type Workout = {
+	date: [
+		{
+			exercise: string
+			reps: number
+			sets: number
+		},
+	]
 }
 
 const AuthContext = createContext<AuthContextValue>({

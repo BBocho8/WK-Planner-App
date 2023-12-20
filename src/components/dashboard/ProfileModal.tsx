@@ -35,7 +35,6 @@ export default function ProfileModal({ inputTitle, icon }: ProfileModalProps) {
 	const [value, setValue] = useState<string | number>()
 	const { setUser, user } = useAuthContext()
 
-	console.log(value)
 	if (!user) {
 		return <p>Loading...</p>
 	}

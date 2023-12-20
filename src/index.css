@@ -98,4 +98,9 @@
 	.nextBttn {
 		@apply text-primary border-none text-2xl;
 	}
+
+	.react-calendar__tile--active {
+		background: #006edc;
+		color: white;
+	}
 }

@@ -8,9 +8,10 @@ interface FormInputProps {
 	defaultValue?: string
 	autoComplete?: string
 	size?: string
+	placeholder?: string
 	required?: boolean
 	id: string
-	value: string
+	value: string | number | undefined
 	innerRef?: React.RefObject<HTMLInputElement>
 	onChange?: (
 		e:
@@ -42,6 +43,7 @@ const FormInput = ({
 	onChange,
 	onFocus,
 	onBlur,
+	placeholder,
 	innerRef,
 	isValid,
 }: FormInputProps) => {
@@ -59,6 +61,7 @@ const FormInput = ({
 				value={value}
 				required={required}
 				onChange={onChange}
+				placeholder={placeholder}
 				onBlur={onBlur}
 				onFocus={onFocus}
 				defaultValue={defaultValue}

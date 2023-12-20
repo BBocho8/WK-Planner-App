@@ -52,6 +52,15 @@ const Register = () => {
 					dob: "",
 					weight: 0,
 					height: 0,
+					workouts: {
+						"01/01/1970": [
+							{
+								exercise: "test",
+								reps: 15,
+								sets: 12,
+							},
+						],
+					},
 				})
 			})
 			.then(() => {
