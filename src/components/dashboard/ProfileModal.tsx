@@ -39,7 +39,7 @@ export default function ProfileModal({ inputTitle, icon }: ProfileModalProps) {
 		return <p>Loading...</p>
 	}
 
-	const userRef2 = getUserRef(user.id)
+	const userRef2 = getUserRef(user.id as string)
 
 	const handleChange = async (value: string | number) => {
 		if (value && user[inputTitle]) {

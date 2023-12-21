@@ -1,16 +1,16 @@
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import { PickersDay, PickersDayProps } from "@mui/x-date-pickers/PickersDay"
-import { FormEvent, useEffect, useMemo, useState } from "react"
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 
 import { Badge } from "@mui/material"
 import dayjs, { Dayjs } from "dayjs"
 import FormInput from "../input/FormInput"
 import { toast } from "react-toastify"
-import { User, useAuthContext } from "../../context/AuthContext"
-import { doc, updateDoc } from "firebase/firestore"
-import { db } from "../../firebase"
+import { Workout, useAuthContext } from "../../context/AuthContext"
+import { setDoc } from "firebase/firestore"
+import { getUserRef } from "../../utils/getUserRef"
 
 function ServerDay(
 	props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
@@ -35,41 +35,46 @@ function ServerDay(
 	)
 }
 
-type WorkoutSingleExercice = {
-	exercise: string | undefined
-	sets: number | undefined
-	reps: number | string | undefined
-}
-
-type DashboardCalendarProps = {
-	user: User
-}
-
-export default function DashboardCalendar({ user }: DashboardCalendarProps) {
-	const { setUser } = useAuthContext()
-
-	const userWorkoutRef = doc(db, "users", user.id)
+export default function DashboardCalendar() {
+	const { setUser, user } = useAuthContext()
 
 	const [value, setValue] = useState<Dayjs | null>(dayjs())
-	const sessionlogged = Object.entries(user.workouts).filter(
-		(workout) => workout[0] === dayjs(value).format("DD/MM/YYYY")
+	const userRef2 = getUserRef(user!.id as string)
+
+	const sessionlogged = useMemo(
+		() =>
+			Object.fromEntries(
+				Object.entries(user!.workouts).filter(
+					(workout) => workout[0] === dayjs(value).format("DD/MM/YYYY")
+				)
+			),
+		[value, user]
+	)
+	const [sessionArr, setSessionArr] = useState(sessionlogged)
+
+	const daysToHighlight = useCallback(
+		(value: Dayjs | null) =>
+			Object.keys(user!.workouts)
+				.filter((date) => parseInt(date.split("/")[2]) === dayjs(value).year())
+				.filter(
+					(date) => parseInt(date.split("/")[1]) === dayjs(value).month() + 1
+				)
+				.map((date) => parseInt(date.split("/")[0])),
+		[user]
 	)
 
-	const daysToHighlight = (value: Dayjs | null) =>
-		Object.keys(user.workouts)
-			.filter((date) => parseInt(date.split("/")[2]) === dayjs(value).year())
-			.filter(
-				(date) => parseInt(date.split("/")[1]) === dayjs(value).month() + 1
-			)
-			.map((date) => parseInt(date.split("/")[0]))
+	useEffect(() => {
+		if (!user) {
+			return
+		} else {
+			setSessionArr(sessionlogged)
+			setHighlightedDays(daysToHighlight(value))
+		}
+	}, [user, sessionlogged, user?.workouts, value, daysToHighlight])
 
 	const [highlightedDays, setHighlightedDays] = useState(daysToHighlight(value))
-	console.log(highlightedDays)
-	const [sessionArr, setSessionArr] = useState<WorkoutSingleExercice[]>(
-		sessionlogged?.[0]?.[1]
-	)
 
-	const [currExoToAdd, setCurrExoToAdd] = useState<WorkoutSingleExercice>({
+	const [currExoToAdd, setCurrExoToAdd] = useState({
 		exercise: "",
 		reps: 0,
 		sets: 0,
@@ -77,10 +82,15 @@ export default function DashboardCalendar({ user }: DashboardCalendarProps) {
 
 	const handleExoSubmit = (e: FormEvent) => {
 		e.preventDefault()
-		if (sessionArr) {
-			setSessionArr([...sessionArr, currExoToAdd])
+		if (sessionArr[dayjs(value).format("DD/MM/YYYY")]) {
+			setSessionArr({
+				[dayjs(value).format("DD/MM/YYYY")]: [
+					...sessionArr[dayjs(value).format("DD/MM/YYYY")],
+					currExoToAdd,
+				],
+			})
 		} else {
-			setSessionArr([currExoToAdd])
+			setSessionArr({ [dayjs(value).format("DD/MM/YYYY")]: [currExoToAdd] })
 		}
 
 		setCurrExoToAdd({
@@ -89,27 +99,34 @@ export default function DashboardCalendar({ user }: DashboardCalendarProps) {
 			sets: 0,
 		})
 		toast.success("Exercise added successfully")
-
-		console.log("hellooo submitted")
 	}
 
 	const handleAddSession = async () => {
+		setHighlightedDays([...highlightedDays, dayjs(value).date()])
+
 		setUser({
-			...user,
+			...user!,
 			workouts: {
-				...user.workouts,
-				[dayjs(value).format("DD/MM/YYYY")]: sessionArr,
+				...user?.workouts,
+				[dayjs(value).format("DD/MM/YYYY")]:
+					sessionArr[dayjs(value).format("DD/MM/YYYY")],
 			},
 		})
-		await updateDoc(userWorkoutRef, {
+		await setDoc(userRef2, {
+			...user,
 			workouts: {
-				...user.workouts,
-				[dayjs(value).format("DD/MM/YYYY")]: sessionArr,
+				...user!.workouts,
+				[dayjs(value).format("DD/MM/YYYY")]:
+					sessionArr[dayjs(value).format("DD/MM/YYYY")],
 			},
 		})
 
 		toast.success("added successfully to db")
 	}
+
+	useEffect(() => {
+		console.log(user)
+	}, [user])
 
 	return (
 		<>
@@ -120,17 +137,22 @@ export default function DashboardCalendar({ user }: DashboardCalendarProps) {
 						setValue(newValue)
 						setHighlightedDays(daysToHighlight(newValue))
 						setSessionArr(
-							Object.entries(user.workouts).filter(
-								(workout) => workout[0] === dayjs(newValue).format("DD/MM/YYYY")
+							Object.fromEntries(
+								Object.entries(user!.workouts).filter(
+									(workout) =>
+										workout[0] === dayjs(newValue).format("DD/MM/YYYY")
+								)
 							)
 						)
 					}}
 					onChange={(newValue) => {
 						setValue(newValue)
-						setHighlightedDays(daysToHighlight(newValue))
 						setSessionArr(
-							Object.entries(user.workouts).filter(
-								(workout) => workout[0] === dayjs(newValue).format("DD/MM/YYYY")
+							Object.fromEntries(
+								Object.entries(user!.workouts).filter(
+									(workout) =>
+										workout[0] === dayjs(newValue).format("DD/MM/YYYY")
+								)
 							)
 						)
 					}}
@@ -163,17 +185,19 @@ export default function DashboardCalendar({ user }: DashboardCalendarProps) {
 								</tr>
 							</thead>
 							<tbody>
-								{sessionArr?.[0]?.[1] ? (
-									sessionArr[0][1].map((exo, idx) => {
-										return (
-											<tr key={(exo.exercise, idx)}>
-												<th>{idx + 1}</th>
-												<td>{exo.exercise}</td>
-												<td>{exo.sets}</td>
-												<td>{exo.reps}</td>
-											</tr>
-										)
-									})
+								{sessionArr[dayjs(value).format("DD/MM/YYYY")] ? (
+									sessionArr[dayjs(value).format("DD/MM/YYYY")].map(
+										(exo: Workout, idx: number) => {
+											return (
+												<tr key={(exo.exercise, idx)}>
+													<th>{idx + 1}</th>
+													<td>{exo.exercise}</td>
+													<td>{exo.sets}</td>
+													<td>{exo.reps}</td>
+												</tr>
+											)
+										}
+									)
 								) : (
 									<tr>
 										<td className="text-sm font-medium" colSpan={4}>

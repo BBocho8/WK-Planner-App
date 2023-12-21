@@ -1,13 +1,9 @@
-import { User } from "../../context/AuthContext"
 import DashboardCalendar from "./DashboardCalendar"
-type WorkoutDashboardProps = {
-	user: User
-}
-const WorkoutsDashboard = ({ user }: WorkoutDashboardProps) => {
-	console.log(user)
+
+const WorkoutsDashboard = () => {
 	return (
 		<div>
-			<DashboardCalendar user={user} />
+			<DashboardCalendar />
 		</div>
 	)
 }

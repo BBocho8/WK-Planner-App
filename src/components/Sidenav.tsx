@@ -46,7 +46,7 @@ const allNavItems = (user: User) => {
 		},
 		{
 			title: "My Workouts",
-			component: <WorkoutsDashboard user={user} />,
+			component: <WorkoutsDashboard />,
 			icon: <FaCalendarCheck />,
 		},
 		{
