@@ -1,13 +1,7 @@
 import * as React from "react"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
-import {
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-} from "@mui/material"
-import { LuLogOut } from "react-icons/lu"
+
 import { TiDelete } from "react-icons/ti"
 
 const style = {
