@@ -40,9 +40,7 @@ const Dashboard = () => {
 	if (authUser && !user) {
 		return (
 			<p className="flex place-content-center">
-				<Link to="/login" className="text-xl font-medium">
-					Loading...
-				</Link>
+				<span className="text-xl font-medium">Loading...</span>
 			</p>
 		)
 	}
