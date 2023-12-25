@@ -30,7 +30,9 @@ const ExerciceDetails = ({
 					}}
 				>
 					<div className="text-neutral">
-						<FaHome />
+						<Link to="/">
+							<FaHome />
+						</Link>
 					</div>
 					<Link to="/exercices">
 						<div className="text-xs capitalize text-neutral hover:text-primary">
